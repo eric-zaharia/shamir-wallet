@@ -1,6 +1,6 @@
 package com.licenta.backend.service;
 
-import com.licenta.backend.Mapper.RegisterUserMapper;
+import com.licenta.backend.mapper.RegisterUserMapper;
 import com.licenta.backend.dto.RegisterRequest;
 import com.licenta.backend.entity.User;
 import com.licenta.backend.repository.UserRepository;

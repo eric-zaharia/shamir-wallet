@@ -1,4 +1,4 @@
-package com.licenta.backend.Mapper;
+package com.licenta.backend.mapper;
 
 import com.licenta.backend.dto.RegisterRequest;
 import com.licenta.backend.entity.User;
