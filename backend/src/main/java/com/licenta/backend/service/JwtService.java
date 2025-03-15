@@ -37,8 +37,8 @@ public class JwtService {
                 .withPayload(extraClaims)
                 .withClaim("token_type", "access")
                 .withClaim("name", userDetails.getFirstName() + " " + userDetails.getLastName())
-                .withClaim("email", userDetails.getEmail())
-                .withSubject(userDetails.getUsername())
+                .withClaim("username", userDetails.getUsername())
+                .withSubject(userDetails.getEmail())
                 .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * JWT_ACCESS_MINUTES))
                 .sign(Algorithm.HMAC256(SECRET_KEY));
@@ -53,9 +53,9 @@ public class JwtService {
             JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY)).build();
 
             DecodedJWT decodedJWT = verifier.verify(token);
-            String username = decodedJWT.getSubject();
+            String email = decodedJWT.getSubject();
 
-            return username.equals(userDetails.getUsername())
+            return email.equals(((User)userDetails).getEmail())
                     && !isTokenExpired(token);
         } catch (SignatureVerificationException e) {
             throw new SignatureVerificationException(Algorithm.HMAC256(SECRET_KEY));
