@@ -1,9 +1,9 @@
 package com.licenta.backend.service;
 
-import com.licenta.backend.dto.AuthenticationRequest;
-import com.licenta.backend.dto.TokenDto;
+import com.licenta.backend.model.AuthenticationRequest;
+import com.licenta.backend.model.TokenDto;
 import com.licenta.backend.mapper.RegisterUserMapper;
-import com.licenta.backend.dto.RegisterRequest;
+import com.licenta.backend.model.RegisterRequest;
 import com.licenta.backend.entity.User;
 import com.licenta.backend.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;

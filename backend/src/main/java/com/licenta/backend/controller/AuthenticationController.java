@@ -1,7 +1,7 @@
 package com.licenta.backend.controller;
 
-import com.licenta.backend.dto.AuthenticationRequest;
-import com.licenta.backend.dto.RegisterRequest;
+import com.licenta.backend.model.AuthenticationRequest;
+import com.licenta.backend.model.RegisterRequest;
 import com.licenta.backend.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
