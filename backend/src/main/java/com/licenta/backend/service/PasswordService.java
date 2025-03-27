@@ -52,7 +52,8 @@ public class PasswordService {
         Password password = passwordRepository.findById(passwordId)
                 .orElseThrow(() -> new RuntimeException("Password not found"));
 
-        EncryptionKey key = new EncryptionKey(Long.toString(passwordId), passwordId);
+        String keyString = encryptionKeyClient.getEncryptionKey(Long.toString(passwordId));
+        EncryptionKey key = new EncryptionKey(keyString, passwordId);
 
         password.setEncryptionKey(key);
 
