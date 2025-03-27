@@ -21,6 +21,7 @@ public class Password {
     private Long id;
     private int shardsNo;
     private int selfCustodyShardsNo;
+    private String label;
 
     @Transient
     private EncryptionKey encryptionKey;

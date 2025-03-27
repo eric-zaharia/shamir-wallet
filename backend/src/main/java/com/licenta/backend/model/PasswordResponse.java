@@ -7,9 +7,8 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class PasswordRequest {
+public class PasswordResponse {
     private String label;
     private List<String> shards;
-    private int shardsNo;
-    private int selfCustodyShardsNo;
+    private int required;
 }

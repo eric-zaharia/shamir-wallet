@@ -1,13 +1,11 @@
 package com.licenta.backend.controller;
 
 import com.licenta.backend.model.PasswordRequest;
+import com.licenta.backend.model.PasswordResponse;
 import com.licenta.backend.service.PasswordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/password")
@@ -20,4 +18,11 @@ public class PasswordController {
         passwordService.addPassword(passwordRequest);
         return ResponseEntity.ok(passwordRequest.toString());
     }
+
+    @GetMapping("/{passwordId}")
+    public ResponseEntity<?> getPassword(@PathVariable String passwordId) {
+        PasswordResponse passwordResponse = passwordService.getPassword(Long.parseLong(passwordId));
+        return ResponseEntity.ok(passwordResponse);
+    }
+
 }

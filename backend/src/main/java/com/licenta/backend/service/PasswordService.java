@@ -6,8 +6,9 @@ import com.licenta.backend.entity.Shard;
 import com.licenta.backend.entity.User;
 import com.licenta.backend.model.EncryptionKey;
 import com.licenta.backend.model.PasswordRequest;
+import com.licenta.backend.model.PasswordResponse;
 import com.licenta.backend.repository.PasswordRepository;
-import com.licenta.backend.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,8 @@ import java.util.List;
 public class PasswordService {
     private final PasswordRepository passwordRepository;
     private final EncryptionKeyClient encryptionKeyClient;
-    private final UserRepository userRepository;
 
-    private final String mockKey = "abcdefgh";
-
+    @Transactional
     public void addPassword(PasswordRequest passwordRequest) {
         Password password = new Password();
         List<Shard> shards = new ArrayList<>();
@@ -35,6 +34,7 @@ public class PasswordService {
             shards.add(shard);
         }
 
+        password.setLabel(passwordRequest.getLabel());
         password.setShards(shards);
         password.setShardsNo(passwordRequest.getShardsNo());
         password.setSelfCustodyShardsNo(passwordRequest.getSelfCustodyShardsNo());
@@ -44,7 +44,22 @@ public class PasswordService {
 
         passwordRepository.save(password);
 
+        String mockKey = "abcdefgh";
         encryptionKeyClient.save(new EncryptionKey(mockKey, password.getId()));
     }
 
+    public PasswordResponse getPassword(long passwordId) {
+        Password password = passwordRepository.findById(passwordId)
+                .orElseThrow(() -> new RuntimeException("Password not found"));
+
+        EncryptionKey key = new EncryptionKey(Long.toString(passwordId), passwordId);
+
+        password.setEncryptionKey(key);
+
+        return new PasswordResponse(
+                password.getLabel(),
+                password.getShards().stream().map(Shard::getShard).toList(),
+                password.getShardsNo() / 2 + 1
+        );
+    }
 }
