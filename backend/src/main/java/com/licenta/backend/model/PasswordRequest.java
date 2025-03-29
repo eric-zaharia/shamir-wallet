@@ -12,4 +12,5 @@ public class PasswordRequest {
     private List<String> shards;
     private int shardsNo;
     private int selfCustodyShardsNo;
+    private List<String> mailRecipients;
 }
