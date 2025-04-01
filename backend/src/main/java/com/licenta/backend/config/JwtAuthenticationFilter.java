@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -21,6 +22,13 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final JwtService jwtService;
+    private static final String AUTH_PATH = "/api/v1/auth/**";
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        AntPathMatcher antPathMatcher = new AntPathMatcher();
+        return antPathMatcher.match(AUTH_PATH, request.getRequestURI());
+    }
 
     @Override
     protected void doFilterInternal(
