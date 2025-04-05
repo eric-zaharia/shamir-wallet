@@ -1,6 +1,6 @@
 package com.licenta.backend.service;
 
-import com.licenta.backend.model.MailDetails;
+import com.licenta.backend.dto.MailDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;

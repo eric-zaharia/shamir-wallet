@@ -1,11 +1,10 @@
-package com.licenta.backend.model;
+package com.licenta.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AuthenticationRequest {
+public class ForgotPasswordDto {
     private String email;
-    private String password;
 }

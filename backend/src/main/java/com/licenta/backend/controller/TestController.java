@@ -1,6 +1,6 @@
 package com.licenta.backend.controller;
 
-import com.licenta.backend.model.MailDetails;
+import com.licenta.backend.dto.MailDetails;
 import com.licenta.backend.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

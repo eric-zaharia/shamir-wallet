@@ -1,7 +1,7 @@
 package com.licenta.backend.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.licenta.backend.model.EncryptionKey;
+import com.licenta.backend.dto.EncryptionKey;
 import jakarta.persistence.*;
 import lombok.*;
 

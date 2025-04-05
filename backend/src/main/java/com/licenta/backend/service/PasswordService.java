@@ -4,7 +4,7 @@ import com.licenta.backend.client.EncryptionKeyClient;
 import com.licenta.backend.entity.Password;
 import com.licenta.backend.entity.Shard;
 import com.licenta.backend.entity.User;
-import com.licenta.backend.model.*;
+import com.licenta.backend.dto.*;
 import com.licenta.backend.repository.PasswordRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -12,6 +12,7 @@ import org.hibernate.proxy.HibernateProxy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,8 @@ public class User implements UserDetails {
     private String phone;
     private String firstName;
     private String lastName;
+    private String resetToken;
+    private LocalDateTime resetTokenExp;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

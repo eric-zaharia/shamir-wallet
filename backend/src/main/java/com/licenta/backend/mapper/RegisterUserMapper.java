@@ -1,6 +1,6 @@
 package com.licenta.backend.mapper;
 
-import com.licenta.backend.model.RegisterRequest;
+import com.licenta.backend.dto.RegisterRequest;
 import com.licenta.backend.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

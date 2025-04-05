@@ -1,4 +1,4 @@
-package com.licenta.backend.model;
+package com.licenta.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.licenta.backend.controller;
 
-import com.licenta.backend.model.PasswordRequest;
-import com.licenta.backend.model.PasswordResponse;
-import com.licenta.backend.model.PublicPasswordResponse;
+import com.licenta.backend.dto.PasswordRequest;
+import com.licenta.backend.dto.PasswordResponse;
+import com.licenta.backend.dto.PublicPasswordResponse;
 import com.licenta.backend.service.PasswordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -1,6 +1,6 @@
 package com.licenta.backend.client;
 
-import com.licenta.backend.model.EncryptionKey;
+import com.licenta.backend.dto.EncryptionKey;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
