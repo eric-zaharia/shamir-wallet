@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -94,7 +95,9 @@ public class PasswordService {
 
         passwordRepository.save(password);
 
-        encryptionKeyClient.save(new EncryptionKey(base64Key, password.getId()));
+        if (passwordRequest.getSelfCustodyShardsNo() != passwordRequest.getShardsNo()) {
+            encryptionKeyClient.save(new EncryptionKey(base64Key, password.getId()));
+        }
     }
 
     public PasswordResponse getPassword(long passwordId) {
@@ -122,6 +125,17 @@ public class PasswordService {
                 password.getShards().stream().map(Shard::getShard).toList(),
                 password.getShardsNo() / 2 + 1
         );
+    }
+
+    @Transactional
+    public void deletePassword(Long passwordId) {
+        Password password = passwordRepository.findById(passwordId)
+                .orElseThrow(() -> new RuntimeException("Password not found"));
+
+        passwordRepository.delete(password);
+        passwordRepository.flush();
+
+        encryptionKeyClient.deleteEncryptionKey(Long.toString(passwordId));
     }
 
     private void sendShardMail(String recipient, String subject, String body) {

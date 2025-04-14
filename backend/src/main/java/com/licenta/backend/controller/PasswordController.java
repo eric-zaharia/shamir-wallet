@@ -19,7 +19,7 @@ public class PasswordController {
     @PostMapping
     public ResponseEntity<?> addPassword(@RequestBody PasswordRequest passwordRequest) {
         passwordService.addPassword(passwordRequest);
-        return ResponseEntity.ok(passwordRequest.toString());
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{passwordId}")
@@ -34,4 +34,9 @@ public class PasswordController {
         return ResponseEntity.ok(passwords);
     }
 
+    @DeleteMapping("/{passwordId}")
+    public ResponseEntity<?> deletePassword(@PathVariable String passwordId) {
+        passwordService.deletePassword(Long.parseLong(passwordId));
+        return ResponseEntity.ok().build();
+    }
 }

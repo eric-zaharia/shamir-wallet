@@ -2,6 +2,7 @@ package com.licenta.backend.client;
 
 import com.licenta.backend.dto.EncryptionKey;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,4 +14,7 @@ public interface EncryptionKeyClient {
 
     @GetMapping("/api/v1/key/{passwordId}")
     String getEncryptionKey(@PathVariable String passwordId);
+
+    @DeleteMapping("/api/v1/key/{passwordId}")
+    void deleteEncryptionKey(@PathVariable String passwordId);
 }
