@@ -15,6 +15,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class EncryptionKeyController {
     private final EncryptionKeyRepository encryptionKeyRepository;
 
+    @DeleteMapping("{passwordId}")
+    public ResponseEntity<?> deletePassword(@PathVariable String passwordId) {
+        EncryptionKey enc = encryptionKeyRepository
+                .findByPasswordId(Long.parseLong(passwordId))
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        encryptionKeyRepository.delete(enc);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("{passwordId}")
     public ResponseEntity<?> findByPasswordId(@PathVariable String passwordId) {
         String enc = encryptionKeyRepository
