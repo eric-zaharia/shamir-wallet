@@ -13,4 +13,6 @@ public interface EmailRecipientRepository extends JpaRepository<EmailRecipient, 
     boolean existsEmailRecipientByUserAndEmail(User user, String email);
 
     List<EmailRecipientDto> findEmailRecipientByUser(User user);
+
+    void removeEmailRecipientByUserAndEmail(User user, String email);
 }

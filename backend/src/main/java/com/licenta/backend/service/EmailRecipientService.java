@@ -25,7 +25,6 @@ public class EmailRecipientService {
         EmailRecipient emailRecipient = new EmailRecipient();
         emailRecipient.setUser(user);
         emailRecipient.setEmail(recipient.getEmail());
-        emailRecipient.setName(recipient.getName());
 
         emailRecipientRepository.save(emailRecipient);
 
@@ -35,5 +34,11 @@ public class EmailRecipientService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return emailRecipientRepository.findEmailRecipientByUser(user);
+    }
+
+    public void deleteEmailRecipient(String email) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        emailRecipientRepository.removeEmailRecipientByUserAndEmail(user, email);
     }
 }

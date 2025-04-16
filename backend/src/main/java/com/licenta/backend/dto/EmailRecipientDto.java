@@ -7,5 +7,4 @@ import lombok.Data;
 @AllArgsConstructor
 public class EmailRecipientDto {
     private String email;
-    private String name;
 }
