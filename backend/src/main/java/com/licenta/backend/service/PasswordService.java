@@ -104,19 +104,22 @@ public class PasswordService {
         Password password = passwordRepository.findById(passwordId)
                 .orElseThrow(() -> new RuntimeException("Password not found"));
 
-        String keyString = encryptionKeyClient.getEncryptionKey(Long.toString(passwordId));
-        byte[] decodedKey = Base64.getDecoder().decode(keyString);
+        if (password.getSelfCustodyShardsNo() != password.getShardsNo()) {
+            String keyString = encryptionKeyClient.getEncryptionKey(Long.toString(passwordId));
+            byte[] decodedKey = Base64.getDecoder().decode(keyString);
 
-        SecretKey secretKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+            SecretKey secretKey = new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
 
-        for (Shard shard : password.getShards()) {
-            try {
-                Cipher cipher = Cipher.getInstance("AES");
-                cipher.init(Cipher.DECRYPT_MODE, secretKey);
-                byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(shard.getShard()));
-                shard.setShard(new String(decryptedBytes, StandardCharsets.UTF_8));
-            } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-                throw new RuntimeException(e);
+            for (Shard shard : password.getShards()) {
+                try {
+                    Cipher cipher = Cipher.getInstance("AES");
+                    cipher.init(Cipher.DECRYPT_MODE, secretKey);
+                    byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(shard.getShard()));
+                    shard.setShard(new String(decryptedBytes, StandardCharsets.UTF_8));
+                } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException |
+                         IllegalBlockSizeException | BadPaddingException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
