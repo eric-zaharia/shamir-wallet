@@ -42,6 +42,10 @@ public class User implements UserDetails {
     @JsonManagedReference
     private List<Password> passwords;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<EmailRecipient> emailRecipients;
+
     @Override
     public String getUsername() {
         return username;
