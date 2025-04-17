@@ -4,6 +4,7 @@ import com.licenta.backend.dto.EmailRecipientDto;
 import com.licenta.backend.entity.EmailRecipient;
 import com.licenta.backend.entity.User;
 import com.licenta.backend.repository.EmailRecipientRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class EmailRecipientService {
         return emailRecipientRepository.findEmailRecipientByUser(user);
     }
 
+    @Transactional
     public void deleteEmailRecipient(String email) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
