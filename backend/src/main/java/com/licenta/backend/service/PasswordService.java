@@ -138,7 +138,9 @@ public class PasswordService {
         passwordRepository.delete(password);
         passwordRepository.flush();
 
-        encryptionKeyClient.deleteEncryptionKey(Long.toString(passwordId));
+        if (password.getSelfCustodyShardsNo() != password.getShardsNo()) {
+            encryptionKeyClient.deleteEncryptionKey(Long.toString(passwordId));
+        }
     }
 
     private void sendShardMail(String recipient, String subject, String body) {
