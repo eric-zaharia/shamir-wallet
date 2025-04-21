@@ -63,7 +63,7 @@ public class MailService {
         String timestamp = LocalDateTime.now()
                 .format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
 
-        helper.addAttachment("shard_" + passwordLabel + "_" + timestamp + ".zip", ds);
+        helper.addAttachment("SHARD_" + passwordLabel + "_" + timestamp + ".zip", ds);
 
         mailSender.send(mime);
     }
