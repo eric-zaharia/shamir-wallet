@@ -13,4 +13,5 @@ public class PasswordRequest {
     private int shardsNo;
     private int selfCustodyShardsNo;
     private List<String> mailRecipients;
+    private String zipPassword;
 }

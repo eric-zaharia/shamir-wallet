@@ -6,6 +6,7 @@ import com.licenta.backend.entity.Shard;
 import com.licenta.backend.entity.User;
 import com.licenta.backend.dto.*;
 import com.licenta.backend.repository.PasswordRepository;
+import jakarta.mail.MessagingException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -35,7 +37,7 @@ public class PasswordService {
     }
 
     @Transactional
-    public void addPassword(PasswordRequest passwordRequest) {
+    public void addPassword(PasswordRequest passwordRequest) throws MessagingException, IOException {
         if (passwordRequest.getSelfCustodyShardsNo() > passwordRequest.getShardsNo()) {
             throw new RuntimeException("Invalid number of shards");
         }
@@ -63,7 +65,12 @@ public class PasswordService {
 
         for (int i = 0; i < passwordRequest.getSelfCustodyShardsNo(); i++) {
             String shard = passwordRequest.getShards().removeFirst();
-            this.sendShardMail(passwordRequest.getMailRecipients().removeFirst(), passwordRequest.getLabel() + " Shard", shard);
+            this.sendShardMail(
+                    passwordRequest.getLabel(),
+                    shard,
+                    passwordRequest.getZipPassword(),
+                    passwordRequest.getMailRecipients().removeFirst()
+            );
         }
 
         Cipher cipher;
@@ -151,8 +158,12 @@ public class PasswordService {
         }
     }
 
-    private void sendShardMail(String recipient, String subject, String body) {
-        MailDetails mailDetails = new MailDetails(recipient, subject, body);
-        this.mailService.sendSimpleMail(mailDetails);
+    private void sendShardMail(String passwordLabel, String shard, String zipPassword, String recipient) throws MessagingException, IOException {
+        this.mailService.sendEncryptedZip(
+                passwordLabel,
+                shard,
+                zipPassword,
+                recipient
+        );
     }
 }

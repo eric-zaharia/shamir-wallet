@@ -4,6 +4,8 @@ import com.licenta.backend.dto.MailDetails;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import net.lingala.zip4j.io.outputstream.ZipOutputStream;
 import net.lingala.zip4j.model.ZipParameters;
@@ -43,21 +45,25 @@ public class MailService {
     }
 
     @Async
-    public void sendEncryptedZip(String passwordName,
-                                 String text,
+    public void sendEncryptedZip(String passwordLabel,
+                                 String shard,
                                  String password,
-                                 String to) throws IOException, MessagingException {
+                                 String recipient) throws IOException, MessagingException {
 
-        byte[] zipBytes = buildZip(text, password.toCharArray());
+        byte[] zipBytes = buildZip(shard, password.toCharArray());
 
         MimeMessage mime = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mime, true, StandardCharsets.UTF_8.name());
-        helper.setTo(to);
-        helper.setSubject("Shard " + passwordName);
+        helper.setTo(recipient);
+        helper.setSubject("Shard " + passwordLabel);
         helper.setText("Encrypted ZIP attached – use your selected password to open it.");
 
         ByteArrayDataSource ds = new ByteArrayDataSource(zipBytes, "application/zip");
-        helper.addAttachment("shard.zip", ds);
+
+        String timestamp = LocalDateTime.now()
+                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss"));
+
+        helper.addAttachment("shard_" + passwordLabel + "_" + timestamp + ".zip", ds);
 
         mailSender.send(mime);
     }
