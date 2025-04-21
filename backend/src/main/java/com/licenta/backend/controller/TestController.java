@@ -4,9 +4,7 @@ import com.licenta.backend.dto.MailDetails;
 import com.licenta.backend.service.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/test")
@@ -29,5 +27,11 @@ public class TestController {
         mailService.sendSimpleMail(mailDetails);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/sendZip")
+    public ResponseEntity<?> send() throws Exception {
+        mailService.sendEncryptedZip("Test password", "test parola zip 2", "1234", "zahariaeric@gmail.com");
+        return ResponseEntity.accepted().build();
     }
 }

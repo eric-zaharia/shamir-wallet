@@ -10,7 +10,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.crypto.*;
 import javax.crypto.spec.SecretKeySpec;
@@ -134,6 +133,15 @@ public class PasswordService {
     public void deletePassword(Long passwordId) {
         Password password = passwordRepository.findById(passwordId)
                 .orElseThrow(() -> new RuntimeException("Password not found"));
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String label = password.getLabel();
+
+        this.mailService.sendSimpleMail(new MailDetails(
+                user.getEmail(),
+                "Deleted password " + label,
+                "Your password has been deleted!"
+        ));
 
         passwordRepository.delete(password);
         passwordRepository.flush();
