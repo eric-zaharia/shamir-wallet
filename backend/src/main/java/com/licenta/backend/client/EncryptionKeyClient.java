@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(name = "password-store", url = "${enc_service.api.base.url}")
+@FeignClient(name = "password-store", url = "${enc_service.api.base.url}" + ":" + "${enc_service.api.port}")
 public interface EncryptionKeyClient {
     @PostMapping(value="/api/v1/key")
     void save(EncryptionKey encryptionKey);
