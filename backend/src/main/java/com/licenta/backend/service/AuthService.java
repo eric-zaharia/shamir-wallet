@@ -25,7 +25,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final MailService mailService;
 
-    @Value("${password.reset.url}")
+    @Value("${client.base.url}" + ":" + "${client.port}" + "/" + "${client.reset-password}")
     private String resetPasswordUrl;
 
     public void resetPassword(ResetPasswordDto resetPasswordDto) throws Exception {

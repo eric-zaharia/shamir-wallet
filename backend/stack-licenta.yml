@@ -1,0 +1,93 @@
+version: "3.9"
+
+services:
+  frontend:
+    image: ericzaharia/licenta-frontend-mac:latest
+    ports:
+      - target: 80
+        published: 8080
+    networks: [backend-net]
+    deploy:
+      replicas: 1
+
+  backend:
+    image: ericzaharia/licenta-backend-mac:latest
+    ports:
+      - target: 8443
+        published: 8443
+    networks: [backend-net, backend-db-net, keystore-net]
+    environment:
+      DB_HOST: db_backend
+      DB_PORT: 5432
+      DB_NAME: licenta
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME: zahariaeric@gmail.com
+      MAIL_PASSWORD: rews gubf cexi batd
+
+      CLIENT_BASE_URL: localhost
+      CLIENT_PORT: 8080
+      
+      KEYSTORE_HOST: keystore
+      KEYSTORE_PORT: 8081
+    deploy:
+      replicas: 1
+
+  keystore:
+    image: ericzaharia/licenta-keystore-mac:latest
+    ports:
+      - target: 8081
+        published: 8081
+    networks: [keystore-net, keystore-db-net]
+    environment:
+      DB_HOST: db_keystore
+      DB_PORT: 5432
+      DB_NAME: password-store
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+    deploy:
+      replicas: 1
+
+  db_backend:
+    image: postgres:latest
+    volumes:
+      - licenta-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: licenta
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - backend-db-net
+    deploy:
+      replicas: 1
+
+  db_keystore:
+    image: postgres:latest
+    volumes:
+      - keystore-db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: password-store
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    networks:
+      - keystore-db-net
+    deploy:
+      replicas: 1
+
+networks:
+  backend-net:
+    driver: overlay
+  keystore-net:
+    driver: overlay
+  keystore-db-net:
+    driver: overlay
+  backend-db-net:
+    driver: overlay
+
+volumes:
+  licenta-db-data:
+  keystore-db-data:
+  
