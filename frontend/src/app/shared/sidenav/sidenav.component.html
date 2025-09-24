@@ -1,0 +1,107 @@
+<mat-sidenav-container class="example-container">
+    <mat-sidenav
+        #sidenav
+        mode="side"
+        opened="false"
+        class="modern-sidenav"
+        [fixedInViewport]="true"
+        [fixedTopGap]="0"
+        [fixedBottomGap]="0">
+
+        <div class="sidenav-header">
+            <h3 class="app-name">My App</h3>
+        </div>
+        <mat-divider></mat-divider>
+
+        <mat-nav-list>
+            <a
+                mat-list-item
+                routerLink="home"
+                routerLinkActive="active-link">
+                <div class="icon-name-container">
+                    <mat-icon mat-list-icon>home</mat-icon>
+                    <span mat-line>Home</span>
+                </div>
+            </a>
+
+            <a
+                mat-list-item
+                routerLink="wallets"
+                routerLinkActive="active-link">
+                <div class="icon-name-container">
+                    <mat-icon mat-list-icon>wallet</mat-icon>
+                    <span mat-line>My Wallet</span>
+                </div>
+            </a>
+
+            @if (authenticated) {
+                <a
+                    mat-list-item
+                    routerLink="passwords"
+                    routerLinkActive="active-link">
+                    <div class="icon-name-container">
+                        <mat-icon mat-list-icon>lock</mat-icon>
+                        <span mat-line>My Passwords</span>
+                    </div>
+                </a>
+                <a
+                    mat-list-item
+                    routerLink="password/add"
+                    routerLinkActive="active-link">
+                    <div class="icon-name-container">
+                        <mat-icon mat-list-icon>add</mat-icon>
+                        <span mat-line>Add Password</span>
+                    </div>
+                </a>
+                <a
+                    mat-list-item
+                    routerLink="user/profile"
+                    routerLinkActive="active-link">
+                    <div class="icon-name-container">
+                        <mat-icon mat-list-icon>person</mat-icon>
+                        <span mat-line>User Profile</span>
+                    </div>
+                </a>
+            } @else {
+                <a
+                    mat-list-item
+                    routerLink="login"
+                    routerLinkActive="active-link">
+                    <div class="icon-name-container">
+                        <mat-icon mat-list-icon>login</mat-icon>
+                        <span mat-line>Login</span>
+                    </div>
+                </a>
+                <a
+                    mat-list-item
+                    routerLink="register"
+                    routerLinkActive="active-link">
+                    <div class="icon-name-container">
+                        <mat-icon mat-list-icon>person_add</mat-icon>
+                        <span mat-line>Register</span>
+                    </div>
+                </a>
+            }
+        </mat-nav-list>
+    </mat-sidenav>
+
+    <mat-sidenav-content style="background: #f3f4f6">
+        <mat-toolbar color="primary">
+            <div class="toolbar-container">
+                <button mat-icon-button (click)="sidenav.toggle()">
+                    <mat-icon>menu</mat-icon>
+                </button>
+                @if (authenticated) {
+                    <div class="sidenav-footer">
+                        <button mat-button class="logout-button" (click)="logout()">
+                            <mat-icon>exit_to_app</mat-icon>
+                            <span>Logout</span>
+                        </button>
+                    </div>
+                }
+            </div>
+        </mat-toolbar>
+
+        <router-outlet></router-outlet>
+    </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>Add a new wallet</h2>
+<mat-dialog-content>
+    <section>
+        <mat-button-toggle-group
+            name="walletAction"
+            [(ngModel)]="selectedAction"
+            aria-label="Wallet Action"
+            [hideSingleSelectionIndicator]="true"
+        >
+            <mat-button-toggle value="import">Import wallet</mat-button-toggle>
+            <mat-button-toggle *ngIf="authenticated" value="select">Saved wallets</mat-button-toggle>
+            <mat-button-toggle value="create">Create wallet</mat-button-toggle>
+        </mat-button-toggle-group>
+    </section>
+
+    <br>
+
+    @if (selectedAction === 'import') {
+        <mat-form-field style="width: 100%">
+            <mat-label>Textarea</mat-label>
+            <textarea matInput [(ngModel)]="mnemonic"></textarea>
+        </mat-form-field>
+    } @else if (selectedAction === 'create') {
+        <button *ngIf="mnemonic === ''" mat-flat-button (click)="getMnemonic()">
+            Generate mnemonic
+        </button>
+        <p *ngIf="mnemonic">{{mnemonic}}</p>
+    } @else {
+        <p>You can directly import one of your saved wallets</p>
+    }
+
+    @if (selectedAction !== 'select' && mnemonic !== '') {
+        <mat-form-field style="width: 100%">
+            <mat-label>Enter your password</mat-label>
+            <input matInput [type]="hide() ? 'password' : 'text'" [formControl]="userPassword"/>
+            <button
+                mat-icon-button
+                matSuffix
+                (click)="clickEvent($event)"
+                [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide()"
+            >
+                <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+    }
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancel</button>
+    <button mat-button *ngIf="selectedAction === 'create' && authenticated && mnemonic"
+            (click)="saveMnemonic()"
+            [disabled]="userPassword.invalid || mnemonic === ''">
+        Add and save mnemonic
+    </button>
+    <button mat-button
+            (click)="selectSavedPassword()"
+            *ngIf="selectedAction === 'select'">
+        Pick wallet
+    </button>
+    <button mat-button cdkFocusInitial (click)="onAddClick()"
+            *ngIf="selectedAction !== 'select'"
+            [disabled]="selectedAction === 'select' || userPassword.invalid || mnemonic === ''">
+        Add
+    </button>
+</mat-dialog-actions>

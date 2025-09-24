@@ -1,0 +1,70 @@
+<!-- register.component.html -->
+<div class="register-container">
+    <mat-card appearance="outlined" class="register-card">
+        <mat-card-header>
+            <mat-card-title>Create an account</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="email">
+                <mat-form-field>
+                    <mat-label>Enter your email</mat-label>
+                    <input
+                        matInput
+                        placeholder="pat@example.com"
+                        [formControl]="email"
+                        (blur)="updateErrorMessage()"
+                        required
+                    />
+                    @if (email.invalid) {
+                        <mat-error>{{ errorMessage() }}</mat-error>
+                    }
+                </mat-form-field>
+            </div>
+            <div class="password">
+                <mat-form-field>
+                    <mat-label>Enter your password</mat-label>
+                    <input
+                        matInput
+                        [type]="hide() ? 'password' : 'text'"
+                        [formControl]="password"
+                        required
+                    />
+                    <button
+                        mat-icon-button
+                        matSuffix
+                        (click)="clickEvent($event)"
+                        [attr.aria-label]="'Hide password'"
+                        [attr.aria-pressed]="hide()"
+                    >
+                        <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>First Name</mat-label>
+                    <input matInput [formControl]="firstName">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Last Name</mat-label>
+                    <input matInput [formControl]="lastName">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Username</mat-label>
+                    <input matInput [formControl]="username">
+                </mat-form-field>
+                <mat-form-field>
+                    <mat-label>Phone Number</mat-label>
+                    <input matInput [formControl]="phoneNumber">
+                </mat-form-field>
+            </div>
+            <p *ngIf="errorMsg" style="color: red">Username/Email already linked to an account.</p>
+        </mat-card-content>
+        <mat-card-footer>
+            <button mat-flat-button
+                    (click)="register()"
+                    [disabled]="email.invalid || password.invalid || firstName.invalid
+                    || lastName.invalid || username.invalid || phoneNumber.invalid">
+                Register
+            </button>
+        </mat-card-footer>
+    </mat-card>
+</div>

@@ -1,0 +1,90 @@
+<div class="user-profile-container">
+    <mat-card appearance="outlined" class="user-profile-card">
+        <mat-card-header>
+            <mat-card-title>My profile</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <p>Username: {{userProfile.username}}</p>
+            <p>Name: {{userProfile.name}}</p>
+            <p>Email Address: {{userProfile.email}}</p>
+            <br>
+            <mat-divider></mat-divider>
+            <div *ngIf="loading" class="spinner-container">
+                <mat-spinner [diameter]="25"></mat-spinner>
+            </div>
+            @if (!loading) {
+                @if (emailRecipients.length !== 0) {
+                    <p>My saved email addresses:</p>
+                    <mat-list>
+                        @for (recipient of emailRecipients; track $index) {
+                            <mat-list-item>
+                                <div class="recipient-container">
+                                    <p>{{$index + 1}}. {{recipient.email}}</p>
+                                    <button
+                                        mat-icon-button
+                                        (click)="deleteEmailRecipient($index)">
+                                        <mat-icon fontIcon="delete"></mat-icon>
+                                    </button>
+                                </div>
+                            </mat-list-item>
+                        }
+                        @if (addAddress) {
+                            <br>
+                            <div style="display: flex; justify-content: flex-start;">
+                                <button
+                                    mat-stroked-button
+                                    (click)="enableEmailForm()">
+                                    Add another email address
+                                </button>
+                            </div>
+                        }
+
+                    </mat-list>
+                } @else {
+                    @if (addAddress) {
+                        <br>
+                        <p>No email recipients found!</p>
+                        <div style="display: flex; justify-content: flex-start;">
+                            <button
+                                mat-stroked-button
+                                (click)="enableEmailForm()">
+                                Add another email address
+                            </button>
+                        </div>
+                    }
+                }
+            }
+            @if (showEmailForm) {
+                <mat-form-field>
+                    <mat-label>Enter your email</mat-label>
+                    <input
+                        matInput
+                        placeholder="pat@example.com"
+                        [formControl]="currentEmailToAdd"
+                        required
+                    />
+                </mat-form-field>
+
+                <div style="display: flex; justify-content: flex-end">
+                    <div style="width:40%; display: flex; justify-content: space-between; align-items: center">
+                        <button
+                            mat-stroked-button
+                            (click)="cancelAddEmail()">
+                            Cancel
+                        </button>
+
+                        <button
+                            mat-flat-button
+                            [disabled]="currentEmailToAdd.invalid"
+                            (click)="submitNewEmail()">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+            }
+        </mat-card-content>
+        <mat-card-footer>
+
+        </mat-card-footer>
+    </mat-card>
+</div>

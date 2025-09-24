@@ -1,0 +1,76 @@
+<div class="home-container">
+    <mat-card appearance="outlined" class="home-card">
+        <mat-card-header>
+            <mat-card-title>How it works</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div>
+                <h3>Save your crypto mnemonic phrase securely</h3>
+                <mat-divider></mat-divider>
+                <p>
+                    This wallet uses
+                    <a href="https://en.wikipedia.org/wiki/Shamir%27s_secret_sharing">
+                        <b>Shamir's Secret Sharing</b>
+                    </a>
+                    algorithm to split your mnemonic phrase into your desired number of shares.
+                </p>
+                <br><br>
+                <img src="/shamir-diagram.drawio.png">
+                <br><br><br>
+                <p>
+                    After your secret was split into n shares, it can be reconstructed using <b>no less
+                    than half</b> of them. You can choose to keep any number of the created shares,
+                    which you will receive as <b>encrypted files</b> to your desired email address. The rest are
+                    stored securely in our server.
+                </p>
+            </div>
+
+            <br><br>
+
+            <div>
+                <h3>Recommendations</h3>
+                <mat-divider></mat-divider>
+
+                <p>To make sure your secret is stored as securely as possible we recommend the following:</p>
+
+                <ul>
+                    <li>
+                        <b>Always</b> keep a majority of the shares in your custody. This way, even if anything
+                        happens to our servers, you and only you can decrypt your secret.
+                    </li>
+                    <br>
+                    <li>
+                        <b>Securely</b> store your shares in different places (e.g. non-overlapping cloud providers,
+                        different family members, a group of trusted unrelated people, different physical locations).
+                        This way, even if you lose one share and suspect it has been compromised, <b>provided you have
+                        access to a majority</b>, you will be able to access your wallet and safely migrate your funds.
+                    </li>
+                    <br>
+                    <li>
+                        When choosing the password your share files will be encrypted with, please note it down or
+                        choose one you can remember. <b>It cannot be changed or recovered.</b>
+                    </li>
+                    <br>
+                    <li>
+                        Use a <b>strong password</b> for your account (minimum 15 characters, both upper and lower case
+                        letters, numbers, symbols and does not contain your name or the name of the service you
+                        are using).
+                    </li>
+                </ul>
+            </div>
+            <br>
+            @if (!authenticated) {
+                <p style="color: red">
+                    You can only use the store/recover password features after
+                    <a routerLink="/login">logging into your account</a>.
+                </p>
+                <p>
+                    If you do not already have an account, create one
+                    <a routerLink="/register">here</a>.
+                </p>
+            }
+        </mat-card-content>
+
+    </mat-card>
+</div>

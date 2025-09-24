@@ -1,0 +1,100 @@
+<div class="passwords-container">
+    <mat-card appearance="outlined" class="passwords-card">
+        <mat-card-header>
+            <mat-card-title>Choose a password</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-content>
+            <mat-stepper [linear]="true" #stepper>
+                <mat-step>
+                    <ng-template matStepLabel>Select wallet</ng-template>
+                    <div class="flexForm">
+                        <mat-list>
+                            <mat-radio-group
+                                aria-label="Select an option"
+                                [formControl]="radioGroup">
+                                @for (password of passwords; track $index) {
+                                    <div>
+                                        <mat-radio-button [value]="$index">
+                                            {{ passwords[$index].label }}
+                                        </mat-radio-button>
+                                    </div>
+                                }
+                            </mat-radio-group>
+                        </mat-list>
+                    </div>
+                    <div>
+                        <button mat-button matStepperNext type="button" (click)="invalidateWalletAndGetShards()">Next</button>
+                    </div>
+                </mat-step>
+
+                <mat-step>
+                    <ng-template matStepLabel>Decrypt wallet</ng-template>
+
+                    @if (getRequiredForDecryption() === 0) {
+                        @if (decryptedPassword === '' && !(shardError$ | async)) {
+                            <button mat-flat-button (click)="decryptPassword(passwords[radioGroup.value].id)">
+                                Decrypt password
+                            </button>
+                        } @else {
+                            @if (!(shardError$ | async)) {
+                                <p>Password successfully decrypted</p>
+                            } @else {
+                                <p>Wrong shard!</p>
+                            }
+                        }
+                    } @else if (getRequiredForDecryption() !== 0) {
+                        <h4>Required for decryption: {{ getRequiredForDecryption() }}</h4>
+                        <mat-form-field>
+                            <mat-label>Input</mat-label>
+                            <input matInput [(ngModel)]="this.currentSelfCustodyShard">
+                        </mat-form-field>
+                        <button mat-flat-button
+                                (click)="addSelfCustodyShard(passwords[radioGroup.value].id, this.currentSelfCustodyShard)">
+                            Add self custody shard
+                        </button>
+                    }
+
+                    <div>
+                        <button mat-button matStepperPrevious type="button" (click)="stepper.reset()">Previous</button>
+                        <button mat-button matStepperNext type="button"
+                                [disabled]="getRequiredForDecryption() !== 0
+                                || decryptedPassword === ''
+                                || (shardError$ | async)"
+                        >
+                            Next
+                        </button>
+                    </div>
+                </mat-step>
+                <mat-step>
+                    <ng-template matStepLabel>Import wallet</ng-template>
+                    <h4>Are you sure you want to import wallet {{ passwords[radioGroup.value]?.label }}?</h4>
+                    <p>Select a password for your wallet</p>
+                    <mat-form-field>
+                        <mat-label>Enter your password</mat-label>
+                        <input matInput [type]="hide() ? 'password' : 'text'" [formControl]="userPassword"/>
+                        <button
+                            mat-icon-button
+                            matSuffix
+                            (click)="clickEvent($event)"
+                            [attr.aria-label]="'Hide password'"
+                            [attr.aria-pressed]="hide()"
+                        >
+                            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                    </mat-form-field>
+
+                    <div>
+                        <button mat-button matStepperPrevious type="button">Previous</button>
+                        <button mat-button matStepperNext
+                                type="button"
+                                (click)="submitWallet()"
+                                [disabled]="userPassword.invalid">
+                            Submit
+                        </button>
+                    </div>
+                </mat-step>
+            </mat-stepper>
+        </mat-card-content>
+    </mat-card>
+</div>

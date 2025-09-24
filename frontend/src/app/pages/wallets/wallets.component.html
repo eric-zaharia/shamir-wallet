@@ -1,0 +1,97 @@
+<div class="wallets-container">
+    <mat-card appearance="outlined" class="wallets-card">
+        <mat-card-header>
+            <mat-card-title>My wallet</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div *ngIf="loading" class="spinner-container">
+                <mat-spinner [diameter]="25"></mat-spinner>
+            </div>
+            <div *ngIf="!loading">
+                @if (!existsAccount()) {
+                    <p>Import a wallet!</p>
+                } @else if(!accountLocked()) {
+                    <p><b>Address:</b> {{wallet?.address?.bech32()}}</p>
+                    <p><b>Balance:</b> {{balance$ | async}} EGLD</p>
+
+                    @if (fetchedTransactions.length > 0) {
+                        <p><b>Transactions:</b></p>
+
+                        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+                            <ng-container matColumnDef="incoming">
+                                <th mat-header-cell *matHeaderCellDef> Incoming </th>
+                                <td mat-cell *matCellDef="let element"> {{element.incoming}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="address">
+                                <th mat-header-cell *matHeaderCellDef> Address </th>
+                                <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef> Amount </th>
+                                <td mat-cell *matCellDef="let element">
+                                    {{element.incoming ? '+' : '-'}}{{element.amount}} EGLD
+                                </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="timestamp">
+                                <th mat-header-cell *matHeaderCellDef> Timestamp </th>
+                                <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator [pageSize]="5" showFirstLastButtons></mat-paginator>
+                    } @else {
+                        <p>No transactions yet</p>
+                    }
+                }
+
+                @if (existsAccount() && accountLocked()) {
+                    <p>Enter your password to unlock your wallet.</p>
+                    <mat-form-field>
+                        <mat-label>Enter your password</mat-label>
+                        <input matInput [type]="hide() ? 'password' : 'text'" [formControl]="userPassword"/>
+                        <button
+                            mat-icon-button
+                            matSuffix
+                            (click)="clickEvent($event)"
+                            [attr.aria-label]="'Hide password'"
+                            [attr.aria-pressed]="hide()"
+                        >
+                            <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                    </mat-form-field>
+                    <br>
+                    <button mat-flat-button (click)="unlockWallet()" [disabled]="userPassword.invalid">
+                        Unlock wallet
+                    </button>
+                }
+            </div>
+            <br><br>
+        </mat-card-content>
+
+        <mat-card-footer>
+            <div style="display: flex; justify-content: space-between">
+                @if (!existsAccount()) {
+                    <button mat-stroked-button (click)="openDialog()">
+                        Add wallet
+                    </button>
+                } @else {
+                    <button mat-stroked-button (click)="removeAccount()">
+                        Remove wallet
+                    </button>
+                    @if (!accountLocked()) {
+                        <button mat-flat-button (click)="transfer()">
+                            Transfer
+                        </button>
+                    }
+                }
+            </div>
+        </mat-card-footer>
+    </mat-card>
+</div>
