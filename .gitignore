@@ -58,3 +58,7 @@ build/
 hs_err_pid*
 replay_pid*
 >>>>>>> backend/main
+.DS_Store
+.gitattributes
+.idea/
+.mvn/
